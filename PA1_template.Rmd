@@ -8,15 +8,54 @@ output:
 
 ## Loading and preprocessing the data
 
+First we load up the activity data and view a summary.
+
+```{r}
+library(plyr)
+a <- data.frame(read.csv("activity.csv"))
+summary(a)
+```
+
+Next we remove the NAs from the steps data.
+
+```{r}
+b <- a[!is.na(a$steps),]
+summary(b)
+```
 
 
 ## What is mean total number of steps taken per day?
 
+The total daily steps are then calculated and a histogram is plotted.
 
+```{r}
+c <- aggregate(steps ~ date , data=b , sum)
+hist(c$steps)
+```
+
+The mean and median number of steps per day are:
+
+```{r}
+mean(c$steps)
+median(c$steps)
+```
 
 ## What is the average daily activity pattern?
 
+We then calculate another set giving the means accross the different intervals on all the days and plot a time series to show average steps across a day.
 
+```{r}
+d <- aggregate(steps ~ interval , data=b , mean)
+plot(c(1:288), d$steps,type="l", xlab="Interval", ylab="Average Steps" )
+```
+
+The peak shown on the plot corresponds to the interval
+
+```{r}
+d[d$steps==max(d$steps),]$interval
+```
+
+Therefore the 5-minute interval 8:35 until 8:40.
 
 ## Imputing missing values
 
